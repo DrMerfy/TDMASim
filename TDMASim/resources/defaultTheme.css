@@ -1,0 +1,22 @@
+/*Main page css*/
+
+.pane-node {
+}
+
+/*Slider CSS*/
+.jfx-slider{
+    -jfx-default-thumb: #AB47BC;
+    -jfx-indicator-position: right;
+}
+
+.jfx-slider> .thumb {
+    -fx-background-color: #AB47BC;
+}
+
+.jfx-slider .track {
+    -fx-background-color: #6A1B9A;
+}
+
+.jfx-slider .animated-thumb{
+    -fx-background-color: #AB47BC;
+}
