@@ -4,6 +4,7 @@ import grapher.graph.LineGraph;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -31,12 +32,14 @@ public class App extends Application {
 
         Random random = new Random();
         graph.setInterval(50);
+        graph.setStrokeWidth(2);
         int[] values = new int[]{50, 70, 70, 42, 50, 80, 90, 90, 52, 22, 20, 52, 48, 42, 54, 20, 19, 24, 40, 82, 78, 52, 51, 62, 62};
         //int[] values = new int[]{10,40,30,5,45,10,45,10};
-        //for(int i = 0; i < 800/50; i++)
-          //  graph.addValue(random.nextInt(500));
         for(int v : values)
             graph.addValue(v*5);
+
+        //for(int i = 0; i < 800/50; i++)
+        //  graph.addValue(random.nextInt(500));
 
         graph.render();
     }

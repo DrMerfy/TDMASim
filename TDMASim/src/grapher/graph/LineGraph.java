@@ -49,8 +49,9 @@ public class LineGraph extends Pane {
     }
 
     public void render(){
-        path= "M0,"+points.get(0).getY();
+        path = "M0,"+this.getHeight();
         renderPoints();
+        path += "L"+this.getWidth()+","+this.getHeight();
         SVGPath svg = new SVGPath();
 
         svg.setStrokeWidth(strokeWidth);
@@ -64,6 +65,46 @@ public class LineGraph extends Pane {
 
     public void setInterval(int interval) {
         this.interval = interval;
+    }
+
+    public Paint getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(Paint stroke) {
+        this.stroke = stroke;
+    }
+
+    public Paint getFill() {
+        return fill;
+    }
+
+    public void setFill(Paint fill) {
+        this.fill = fill;
+    }
+
+    public double getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    public void setStrokeWidth(double strokeWidth) {
+        this.strokeWidth = strokeWidth;
+    }
+
+    public double getSmoothing() {
+        return smoothing;
+    }
+
+    public void setSmoothing(double smoothing) {
+        this.smoothing = smoothing;
+    }
+
+    public StrokeLineJoin getStrokeLineJoin() {
+        return strokeLineJoin;
+    }
+
+    public void setStrokeLineJoin(StrokeLineJoin strokeLineJoin) {
+        this.strokeLineJoin = strokeLineJoin;
     }
 
     public void addValue(int value){
@@ -84,11 +125,8 @@ public class LineGraph extends Pane {
 
         //Calculate smooth curve
         //see: https://medium.com/@francoisromain/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
-        Point2D controlStart = getControlPoint(null, null, points.get(0), false);
-        Point2D controlEnd = getControlPoint(null, points.get(0), points.get(1), true);
-
-        path += "C"+controlStart.getX()+","+controlStart.getY()+","+controlEnd.getX()+","+controlEnd.getY()+","+
-                points.get(0).getX()+","+points.get(0).getY();
+        Point2D controlStart;
+        Point2D controlEnd;
 
         controlStart = getControlPoint(null, points.get(0), points.get(1), false);
         controlEnd = getControlPoint(points.get(0), points.get(1), points.get(2), true);
