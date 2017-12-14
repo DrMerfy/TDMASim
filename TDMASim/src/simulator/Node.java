@@ -8,12 +8,12 @@ import java.util.Random;
  * @author spiros
  */
 public class Node {
-    private LinkedList<Integer> packageList;
+    private LinkedList<Package> packageList;
     private final int packageListMaxSize;
     
     public Node(int packageListMaxSize) {
         this.packageListMaxSize = packageListMaxSize;
-        packageList = new LinkedList<Integer>();
+        packageList = new LinkedList<>();
     }
     
     public boolean isEmpty() {
@@ -27,8 +27,14 @@ public class Node {
         if (packageList.size() < packageListMaxSize) {
             if (random <= pArrival) {
                 // we add a package to the list
-                packageList.add(1);
+                packageList.add(new Package());
             }
+        }
+    }
+    
+    public void increaseDelayTimeOfNodePackages() {
+        for(Package networkPackage : packageList) {
+            networkPackage.increaseDelay();
         }
     }
     
@@ -36,4 +42,7 @@ public class Node {
         packageList.removeFirst();
     }
     
+    public int getDelayTimeOfFirstPackage() {
+        return packageList.getFirst().getDelayTime();
+    }
 }
