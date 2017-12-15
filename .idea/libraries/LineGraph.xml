@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="LineGraph">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dependencies/LineGraph.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
