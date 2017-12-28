@@ -1,4 +1,0 @@
-package grapher;
-
-class RuntimeManager {
-}
