@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="root" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grapher.MainPage">
+   <children>
+      <JFXButton fx:id="btn_start" text="Start" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets right="40.0" top="40.0" />
+         </StackPane.margin>
+      </JFXButton>
+      <StackPane fx:id="node_holder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="388.0" styleClass="pane-node" StackPane.alignment="TOP_CENTER">
+         <StackPane.margin>
+            <Insets top="20.0" />
+         </StackPane.margin>
+         <children>
+            <JFXTextField fx:id="num_nodes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_LEFT">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </JFXTextField>
+            <Label prefHeight="26.0" prefWidth="115.0" text="Number of nodes" StackPane.alignment="BOTTOM_LEFT" />
+            <JFXTextField fx:id="list_size" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </JFXTextField>
+            <Label prefHeight="26.0" prefWidth="111.0" text="Package list size" StackPane.alignment="BOTTOM_CENTER" />
+            <JFXTextField fx:id="num_circles" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_RIGHT" />
+            <Label prefHeight="26.0" prefWidth="71.0" text="Circles" StackPane.alignment="BOTTOM_RIGHT" />
+         </children>
+      </StackPane>
+      <StackPane fx:id="graph_holder" prefHeight="150.0" prefWidth="200.0">
+         <StackPane.margin>
+            <Insets top="90.0" />
+         </StackPane.margin>
+      </StackPane>
+   </children>
+</StackPane>
