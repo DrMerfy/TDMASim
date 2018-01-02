@@ -11,7 +11,7 @@ public class Package {
     private int packageDelayTime;
 
     /**
-     * trivial contstructor
+     * trivial constructor
      */
     Package() {
         // we create a trivial package which contains a random value between 0 and 1000000;
