@@ -102,8 +102,9 @@ public class TdmaSimulator {
         ArrayList<Double> pArrivalOfNodes = new ArrayList<>();
 
         //initializing the starting possibilities of the arrival of a package at every node
-        for (Double pArrivalOfNode : pArrivalOfNodes) {
-            pArrivalOfNode = pArrival;
+        for (int i = 0; i < numberOfNodes; i++) {
+            pArrivalOfNodes.add(new Double(0));
+            pArrivalOfNodes.set(i, pArrival);
         }
 
         for (int i = 0; i < nodeMaxSizeOfPackageList; i++) {
