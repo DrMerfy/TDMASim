@@ -49,6 +49,12 @@ public class LtdmaNode {
         return packageList.isEmpty();
     }
 
+    /**
+     * This functions changes the state of the Ltdma Node according to it's state and the probability given by it
+     *
+     * @param R is the percentage of slots with package generation
+     * @param N is the number of LtdmaNodes that participate in the simulation
+     */
     private void tryToChangeState (double R, int N) {
         Random rand = new Random();
         double random = rand.nextDouble();
@@ -70,7 +76,7 @@ public class LtdmaNode {
     }
 
     /**
-     * acts according to the state of the LtdmaNode
+     * Acts according to the state of the LtdmaNode
      *
      * if the node has finished the generation of as many packages as the mean Burst Length, then it is going to
      * change state from transmitting to idle
@@ -97,7 +103,7 @@ public class LtdmaNode {
     }
 
     /**
-     * increases the delay time of every package of the TdmaNode by 1
+     * increases the delay time of every package of the LtdmaNode by 1
      */
     public void increaseDelayTimeOfNodePackages() {
         for (Package networkPackage : packageList) {
