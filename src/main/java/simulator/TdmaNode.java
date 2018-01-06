@@ -6,8 +6,8 @@ import java.util.Random;
 /**
  * @author spiros
  */
-public class Node {
-    // the queue of the packages of the of the node
+public class TdmaNode {
+    // the queue of the packages of the of the TdmaNode
     private LinkedList<Package> packageList;
 
     // the max size that the queue can reach
@@ -16,11 +16,11 @@ public class Node {
     /**
      * trivial constructor
      *
-     * @param packageListMaxSize of the node
+     * @param packageListMaxSize of the TdmaNode
      */
-    public Node(int packageListMaxSize) {
+    public TdmaNode(int packageListMaxSize) {
         this.packageListMaxSize = packageListMaxSize;
-        packageList = new LinkedList<>();
+        this.packageList = new LinkedList<>();
     }
 
     /**
@@ -33,7 +33,7 @@ public class Node {
     /**
      * creates a packages using the given pArrival
      *
-     * @param pArrival is the possibility of the arriving of a package at the node
+     * @param pArrival is the possibility of the arriving of a package at the TdmaNode
      */
     public boolean createPackage(double pArrival) {
         Random rand = new Random();
@@ -50,7 +50,7 @@ public class Node {
     }
 
     /**
-     * increases the delay time of every package of the node by 1
+     * increases the delay time of every package of the TdmaNode by 1
      */
     public void increaseDelayTimeOfNodePackages() {
         for (Package networkPackage : packageList) {

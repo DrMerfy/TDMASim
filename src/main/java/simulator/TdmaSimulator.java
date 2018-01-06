@@ -13,7 +13,8 @@ public class TdmaSimulator {
     private int numberOfCircles;
 
     // An ArrayList which contains the nodes which can transmit
-    private ArrayList<Node> nodes;
+    private ArrayList<TdmaNode> tdmaNodes;
+    private ArrayList<LtdmaNode> ltdmaNodes;
 
     // variable which is calculated from the given variables
     private final int maxTime;
@@ -36,23 +37,24 @@ public class TdmaSimulator {
 
         this.maxTime = numberOfNodes * numberOfCircles;
 
-        this.nodes = new ArrayList<>();
+        this.tdmaNodes = new ArrayList<>();
+        this.ltdmaNodes = new ArrayList<>();
     }
 
     /**
      * The function that starts the uniform Simulation of the TDMA Mac protocol
      *
-     * @param pArrival is the possibility of the arrival of a package at every node
+     * @param pArrival is the possibility of the arrival of a package at every tdmaNodes
      */
-    public void runUniformSimulator(double pArrival) {
+    public void runUniformTdmaSimulator(double pArrival) {
         // start of initializations
         packagesTransmited = 0;
 
-        nodes.clear();
+        tdmaNodes.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackage = new ArrayList<>();
 
         for (int i = 0; i < nodeMaxSizeOfPackageList; i++) {
-            nodes.add(new Node(nodeMaxSizeOfPackageList));
+            tdmaNodes.add(new TdmaNode(nodeMaxSizeOfPackageList));
         }
 
         int time = 0;
@@ -62,19 +64,19 @@ public class TdmaSimulator {
             /* Increase the delay time of each package of each node by 1 and
              * Create a package for each node with possibility pArrival
              */
-            for (Node node : nodes) {
-                node.increaseDelayTimeOfNodePackages();
-                node.createPackage(pArrival);
+            for (TdmaNode tdmaNode : tdmaNodes) {
+                tdmaNode.increaseDelayTimeOfNodePackages();
+                tdmaNode.createPackage(pArrival);
             }
 
             // Find which node is going to trasmit
-            int idOfTransmitingNode = time % nodes.size();
+            int idOfTransmitingNode = time % tdmaNodes.size();
 
             // If the node has something to transmit, then transmit the first package of the node.
-            if (!nodes.get(idOfTransmitingNode).isEmpty()) {
-                delayTimeOfTransmittedPackage.add(nodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
+            if (!tdmaNodes.get(idOfTransmitingNode).isEmpty()) {
+                delayTimeOfTransmittedPackage.add(tdmaNodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
 
-                transmit(nodes.get(idOfTransmitingNode));
+                transmit(tdmaNodes.get(idOfTransmitingNode));
             }
             // Go to the next slot time.
             time++;
@@ -89,26 +91,20 @@ public class TdmaSimulator {
     }
 
     /**
-     * The function that starts the Bursty Simulation of the TDMA Mac protocol
+     * The function that starts the Bursty Simulation of the LTDMA Mac protocol, without noise
      *
-     * @param pArrival is the possibility of the arrival of a package at every node
+     * @param R is the percentage of slots with package generation
+     * @param meanBurstLengths is an array that includes the mean burst lengths of every LtdmaNode
      */
-    public void runBurstySimulator(double pArrival) {
+    public void runBurstyLtdmaSimulator(double R, ArrayList<Integer> meanBurstLengths ) {
         // start of initializations
         packagesTransmited = 0;
 
-        nodes.clear();
+        ltdmaNodes.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackage = new ArrayList<>();
-        ArrayList<Double> pArrivalOfNodes = new ArrayList<>();
-
-        //initializing the starting possibilities of the arrival of a package at every node
-        for (int i = 0; i < numberOfNodes; i++) {
-            pArrivalOfNodes.add(new Double(0));
-            pArrivalOfNodes.set(i, pArrival);
-        }
 
         for (int i = 0; i < nodeMaxSizeOfPackageList; i++) {
-            nodes.add(new Node(nodeMaxSizeOfPackageList));
+            ltdmaNodes.add(new LtdmaNode(nodeMaxSizeOfPackageList, meanBurstLengths.get(i)));
         }
 
         int time = 0;
@@ -116,34 +112,22 @@ public class TdmaSimulator {
 
         while (time < maxTime) {
             /* Increase the delay time of each package of each node by 1 and
-             * Create a package for each node with possibility pArrival
+             * for every Ltdma node act according to it's state
              */
-            for (int i = 0; i < nodes.size(); i++) {
-                nodes.get(i).increaseDelayTimeOfNodePackages();
-                boolean arrived = nodes.get(i).createPackage(pArrivalOfNodes.get(i));
-
-                // we set the high and low limits of the increase or decrease
-                if (pArrivalOfNodes.get(i) > 0.05 && pArrivalOfNodes.get(i) < 0.99) {
-                    // if a package arrives, we increase the possibility of the arrival of the next package
-                    if (arrived == true) {
-                        pArrivalOfNodes.set(i, pArrivalOfNodes.get(i) + 0.01);
-                    // if a package does not arrive, we decrease the possibility of the arrival of the next package
-                    } else {
-                        pArrivalOfNodes.set(i, pArrivalOfNodes.get(i) - 0.01);
-                    }
-                }
+            for (LtdmaNode ltdmaNode : ltdmaNodes) {
+                ltdmaNode.increaseDelayTimeOfNodePackages();
+                ltdmaNode.actAccordingToState(R, ltdmaNodes.size());
             }
 
             // Find which node is going to trasmit
-            int idOfTransmitingNode = time % nodes.size();
+            int idOfTransmitingNode = time % ltdmaNodes.size();
 
             // If the node has something to transmit, then transmit the first package of the node.
-            if (!nodes.get(idOfTransmitingNode).isEmpty()) {
-                delayTimeOfTransmittedPackage.add(nodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
+            if (!ltdmaNodes.get(idOfTransmitingNode).isEmpty()) {
+                delayTimeOfTransmittedPackage.add(ltdmaNodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
 
-                transmit(nodes.get(idOfTransmitingNode));
+                transmit(ltdmaNodes.get(idOfTransmitingNode));
             }
-
             // Go to the next slot time.
             time++;
         }
@@ -157,16 +141,30 @@ public class TdmaSimulator {
     }
 
     /**
-     * This function removes the package from the node that has the right transmit (if there is a
+     * This function removes the package from the TdmaNode that has the right to transmit (if there is a
      * package to transmit), increases the packages that has been transmitted and completes
      * the transmission of the package
      *
-     * @param node that has the right to transmit
+     * @param tdmaNode that has the right to transmit
      */
-    private void transmit(Node node) {
-        node.removePackage();
+    private void transmit(TdmaNode  tdmaNode ) {
+        tdmaNode.removePackage();
         packagesTransmited++;
     }
+
+    /**
+     * This function removes the package from the LtdmaNode that has the right to transmit (if there is a
+     * package to transmit), increases the packages that has been transmitted and completes
+     * the transmission of the package
+     *
+     * @param ltdmaNode that has the right to transmit
+     */
+    private void transmit(LtdmaNode ltdmaNode) {
+        ltdmaNode.removePackage();
+        packagesTransmited++;
+    }
+
+
 
     /**
      * @return the Throughput of the Simulation
