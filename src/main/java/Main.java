@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         App.Launch(args);
 
-        //*
+        /*
         TdmaSimulator tdmaSimulator = new TdmaSimulator(8, 6, 100000);
         ArrayList<Integer> meanBurstLengths = new ArrayList<>();
 
@@ -19,10 +19,10 @@ public class Main {
         meanBurstLengths.add(4);
         meanBurstLengths.add(4);
 
-        tdmaSimulator.runBurstyAtdmaSimulator(0.18, meanBurstLengths);
+        tdmaSimulator.runAtdmaSimulator(0.18, meanBurstLengths);
 
         System.out.println("Throughput =  " + tdmaSimulator.getThroughput());
-        System.out.println("Average Delay Time =  " + tdmaSimulator.getAverageDelayTime());
+        System.out.println("Average Delay Time =  " + tdmaSimulator.getAverageDelayTimeSlots());
         //*/
 
     }

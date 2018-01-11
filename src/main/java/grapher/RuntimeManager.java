@@ -51,16 +51,16 @@ class RuntimeManager {
 
         if(!mn.isBursty()) {
             for (double p = 0.05; p <= 1; p += 0.05) {
-                sim.runUniformTdmaSimulator(p);
-                delay.add(sim.getAverageDelayTime());
+                sim.runTdmaSimulation(p);
+                delay.add(sim.getAverageDelayTimeSlots());
                 throughput.add(sim.getThroughput());
                 th$p.addValue(sim.getThroughput());
             }
         }else {
             ArrayList<Integer> rValues = mn.getRValues();
             for (double p = 0.05; p <= 1; p += 0.05) {
-                sim.runBurstyAtdmaSimulator(p,rValues);
-                delay.add(sim.getAverageDelayTime());
+                sim.runAtdmaSimulator(p,rValues);
+                delay.add(sim.getAverageDelayTimeSlots());
                 throughput.add(sim.getThroughput());
                 th$p.addValue(sim.getThroughput());
             }

@@ -1,20 +1,20 @@
 package simulator;
 
 /**
- * @author spiros
+ * @author Spiros
  */
-public class Package {
+public class Packet {
     // the data of the package
     private final double packageData;
 
-    // the time that the package is waiting int the node queue
+    // the time slots that the packet is waiting in the queue of waiting packets of the Station
     private int packageDelayTime;
 
     /**
-     * trivial constructor
+     * trivial constructor of a packet which contains a random value between 0 and 1000000;
      */
-    Package() {
-        // we create a trivial package which contains a random value between 0 and 1000000;
+    Packet() {
+        //
         double ran = Math.random();
         this.packageData = (1000000) * ran;
 
