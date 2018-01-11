@@ -1,31 +1,21 @@
 /*Main page css*/
+* {
+    -fx-primary: #2196F3;
+}
 
 .pane-node {
 }
 
-/*Slider CSS*/
-.jfx-slider {
-    -jfx-default-thumb: #AB47BC;
-    -jfx-indicator-position: right;
-}
-
-.jfx-slider> .thumb {
-    -fx-background-color: #AB47BC;
-}
-
-.jfx-slider .track {
-    -fx-background-color: #6A1B9A;
-}
-
-.jfx-slider .animated-thumb {
-    -fx-background-color: #AB47BC;
-}
 
 /*Main Page CSS*/
 .jfx-text-field {
-    -fx-focus-color: #AA00AA;
+    -fx-focus-color: -fx-primary;
 }
 
 .jfx-text-field:error {
     -fx-focus-color: #AA0000;
+}
+
+.btn-start {
+    -fx-background-color: -fx-primary;
 }

@@ -1,23 +1,35 @@
 package grapher;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
 
 
 public class MainPage {
 
     @FXML public StackPane root;
     @FXML public StackPane node_holder;
-    @FXML public StackPane graph_holder;
+    @FXML public ScrollPane r_holder;
     @FXML public JFXTextField num_nodes;
     @FXML public JFXTextField list_size;
     @FXML public JFXTextField num_circles;
     @FXML public JFXButton btn_start;
+    @FXML public JFXToggleButton btn_bursty;
 
     //Events and catchers
     private EventHandler<ActionEvent> num_nodesChecker;
@@ -25,10 +37,14 @@ public class MainPage {
     private EventHandler<ActionEvent> num_circlesChecker;
     private EventHandler<ActionEvent> onButtonPressed;
 
-    //User-taken variables
+    //User-taken fields
     private int numberOfNodes = 8;
     private int nodeMaxSizeOfPackageList = 3;
     private int numberOfCircles = 10000;
+    private int defaultR = 5;
+
+    //Other fields
+    private boolean isBursty = false;
 
     public int getNumberOfNodes() {
         return numberOfNodes;
@@ -40,6 +56,20 @@ public class MainPage {
 
     public int getNumberOfCircles() {
         return numberOfCircles;
+    }
+
+    public ArrayList<Integer> getRValues() {
+        ArrayList<Integer> values = new ArrayList<>();
+        Pane r = (Pane) r_holder.getContent();
+        for(Node n : r.getChildren()) {
+            values.add(Integer.parseInt(((JFXTextField) n).getText()));
+            System.out.println(((JFXTextField) n).getText());
+        }
+        return values;
+    }
+
+    public boolean isBursty(){
+        return isBursty;
     }
 
     public void setOnStartPressed(EventHandler<ActionEvent> event){
@@ -65,6 +95,13 @@ public class MainPage {
         num_circles.setOnAction(num_circlesChecker);
 
         btn_start.setOnAction(onButtonPressed);
+
+        btn_bursty.setOnAction(event -> {
+            isBursty = !isBursty;
+            if(isBursty){
+                createRPane();
+            }
+        });
     }
 
     //Non-Number insertion catchers
@@ -126,5 +163,16 @@ public class MainPage {
             }
         };
 
+    }
+
+    private void createRPane() {
+        GridPane r = new GridPane();
+        for(int i =0; i<numberOfNodes; i++) {
+            JFXTextField textField = new JFXTextField();
+            textField.setText(String.valueOf(defaultR));
+            GridPane.setMargin(textField, new Insets(10,0,0,0));
+            r.add(textField,1,i);
+        }
+        r_holder.setContent(r);
     }
 }

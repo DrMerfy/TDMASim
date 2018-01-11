@@ -45,13 +45,26 @@ class RuntimeManager {
         TdmaSimulator sim = new TdmaSimulator(mn.getNumberOfNodes(), mn.getNodeMaxSizeOfPackageList(), mn.getNumberOfCircles());
         th$p.setInterval(40);
 
+
         ArrayList<Double> delay = new ArrayList<>();
         ArrayList<Double> throughput = new ArrayList<>();
-        for(double p = 0.05; p <= 1; p+=0.05){
-            sim.runSimulator(p);
-            delay.add(sim.getAverageDelayTime());
-            throughput.add(sim.getThroughput());
-            th$p.addValue(sim.getThroughput());
+
+        if(!mn.isBursty()) {
+            for (double p = 0.05; p <= 1; p += 0.05) {
+                sim.runUniformTdmaSimulator(p);
+                delay.add(sim.getAverageDelayTime());
+                throughput.add(sim.getThroughput());
+                th$p.addValue(sim.getThroughput());
+            }
+        }else {
+            ArrayList<Integer> rValues = mn.getRValues();
+            for (double p = 0.05; p <= 1; p += 0.05) {
+                sim.runBurstyLtdmaSimulator(p,rValues);
+                delay.add(sim.getAverageDelayTime());
+                throughput.add(sim.getThroughput());
+                th$p.addValue(sim.getThroughput());
+            }
+            del$th.setSmoothing(0);
         }
 
         for(int i = 0; i<throughput.size(); i++){
@@ -84,7 +97,10 @@ class RuntimeManager {
         AnchorPane.setBottomAnchor(xAxis,0.0);
         AnchorPane.setLeftAnchor(xAxis, 30.0);
 
+        Plotter.setAxisLabel("p_arrival","throughput",th$p);
+        Plotter.setAxisLabel("throughput", "delay", del$th);
         Plotter.mapXAxis(0,1,th$p);
+        Plotter.mapXAxis(0,1,del$th);
         Plotter.plot(th$p, del$th);
     }
 
