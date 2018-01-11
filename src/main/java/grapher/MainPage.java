@@ -1,20 +1,17 @@
 package grapher;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ public class MainPage {
     private int numberOfNodes = 8;
     private int nodeMaxSizeOfPackageList = 3;
     private int numberOfCircles = 10000;
-    private int defaultR = 5;
+    private int defaultB = 3;
 
     //Other fields
     private boolean isBursty = false;
@@ -100,7 +97,8 @@ public class MainPage {
             isBursty = !isBursty;
             if(isBursty){
                 createRPane();
-            }
+            }else
+                r_holder.setContent(null);
         });
     }
 
@@ -142,6 +140,8 @@ public class MainPage {
             }else {
                 list_size.pseudoClassStateChanged(App.error, true);
             }
+            defaultB = nodeMaxSizeOfPackageList;
+            createRPane();
         };
 
         num_circlesChecker = event -> {
@@ -166,10 +166,11 @@ public class MainPage {
     }
 
     private void createRPane() {
+        r_holder.setContent(null);
         GridPane r = new GridPane();
         for(int i =0; i<numberOfNodes; i++) {
             JFXTextField textField = new JFXTextField();
-            textField.setText(String.valueOf(defaultR));
+            textField.setText(String.valueOf(defaultB));
             GridPane.setMargin(textField, new Insets(10,0,0,0));
             r.add(textField,1,i);
         }

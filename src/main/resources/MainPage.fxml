@@ -31,7 +31,7 @@
             <Label prefHeight="26.0" prefWidth="71.0" text="Circles" StackPane.alignment="BOTTOM_RIGHT" />
          </children>
       </StackPane>
-      <Label fx:id="r_values" text="R_Values" StackPane.alignment="TOP_CENTER">
+      <Label fx:id="r_values" text="B_Values" StackPane.alignment="TOP_CENTER">
          <StackPane.margin>
             <Insets top="120.0" />
          </StackPane.margin>
