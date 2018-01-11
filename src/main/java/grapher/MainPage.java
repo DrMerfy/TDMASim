@@ -121,6 +121,7 @@ public class MainPage {
             }else {
                 num_nodes.pseudoClassStateChanged(App.error, true);
             }
+            createRPane();
         };
 
         list_sizeChecker = event -> {

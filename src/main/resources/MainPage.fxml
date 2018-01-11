@@ -45,10 +45,15 @@
             <Insets bottom="40.0" right="40.0" />
          </StackPane.margin>
       </JFXButton>
-      <JFXToggleButton fx:id="btn_bursty" text="Bursty traffic" StackPane.alignment="TOP_LEFT">
+      <JFXToggleButton fx:id="btn_bursty" text="ATDMA with Bursty traffic" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="20.0" top="90.0" />
+            <Insets left="70.0" top="90.0" />
          </StackPane.margin>
       </JFXToggleButton>
+      <Label text="TDMA" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="20.0" top="115.0" />
+         </StackPane.margin>
+      </Label>
    </children>
 </StackPane>
