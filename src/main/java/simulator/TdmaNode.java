@@ -10,7 +10,7 @@ public class TdmaNode {
     // the queue of the packages of the of the TdmaNode
     private LinkedList<Package> packageList;
 
-    // the max size that the queue can reach
+    // the max size that the packages' queue can reach
     private final int packageListMaxSize;
 
     /**

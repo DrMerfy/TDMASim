@@ -14,7 +14,7 @@ public class TdmaSimulator {
 
     // An ArrayList which contains the nodes which can transmit
     private ArrayList<TdmaNode> tdmaNodes;
-    private ArrayList<LtdmaNode> ltdmaNodes;
+    private ArrayList<AtdmaNode> atdmaNodes;
 
     // variable which is calculated from the given variables
     private final int maxTime;
@@ -38,7 +38,7 @@ public class TdmaSimulator {
         this.maxTime = numberOfNodes * numberOfCircles;
 
         this.tdmaNodes = new ArrayList<>();
-        this.ltdmaNodes = new ArrayList<>();
+        this.atdmaNodes = new ArrayList<>();
     }
 
     /**
@@ -91,20 +91,23 @@ public class TdmaSimulator {
     }
 
     /**
-     * The function that starts the Bursty Simulation of the LTDMA Mac protocol, without noise
+     * The function that starts the Bursty Simulation of the ATDMA Mac protocol without noise
+     * Based on the paper IEEE transactions on communications, vol 51, No 4 April 2003
+     * Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S.Pomportsis
+     *
      *
      * @param R is the percentage of slots with package generation
-     * @param meanBurstLengths is an array that includes the mean burst lengths of every LtdmaNode
+     * @param meanBurstLengths is an array that includes the mean burst lengths of every AtdmaNode
      */
-    public void runBurstyLtdmaSimulator(double R, ArrayList<Integer> meanBurstLengths ) {
+    public void runBurstyAtdmaSimulator(double R, ArrayList<Integer> meanBurstLengths ) {
         // start of initializations
         packagesTransmited = 0;
 
-        ltdmaNodes.clear();
+        atdmaNodes.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackage = new ArrayList<>();
 
         for (int i = 0; i < nodeMaxSizeOfPackageList; i++) {
-            ltdmaNodes.add(new LtdmaNode(nodeMaxSizeOfPackageList, meanBurstLengths.get(i)));
+            atdmaNodes.add(new AtdmaNode(nodeMaxSizeOfPackageList, meanBurstLengths.get(i)));
         }
 
         int time = 0;
@@ -112,21 +115,21 @@ public class TdmaSimulator {
 
         while (time < maxTime) {
             /* Increase the delay time of each package of each node by 1 and
-             * for every Ltdma node act according to it's state
+             * for every Atdma node act according to it's state
              */
-            for (LtdmaNode ltdmaNode : ltdmaNodes) {
-                ltdmaNode.increaseDelayTimeOfNodePackages();
-                ltdmaNode.actAccordingToState(R, ltdmaNodes.size());
+            for (AtdmaNode atdmaNode : atdmaNodes) {
+                atdmaNode.increaseDelayTimeOfNodePackages();
+                atdmaNode.actAccordingToState(R, atdmaNodes.size());
             }
 
             // Find which node is going to trasmit
-            int idOfTransmitingNode = time % ltdmaNodes.size();
+            int idOfTransmitingNode = time % atdmaNodes.size();
 
             // If the node has something to transmit, then transmit the first package of the node.
-            if (!ltdmaNodes.get(idOfTransmitingNode).isEmpty()) {
-                delayTimeOfTransmittedPackage.add(ltdmaNodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
+            if (!atdmaNodes.get(idOfTransmitingNode).isEmpty()) {
+                delayTimeOfTransmittedPackage.add(atdmaNodes.get(idOfTransmitingNode).getDelayTimeOfFirstPackage());
 
-                transmit(ltdmaNodes.get(idOfTransmitingNode));
+                transmit(atdmaNodes.get(idOfTransmitingNode));
             }
             // Go to the next slot time.
             time++;
@@ -153,14 +156,14 @@ public class TdmaSimulator {
     }
 
     /**
-     * This function removes the package from the LtdmaNode that has the right to transmit (if there is a
+     * This function removes the package from the AtdmaNode that has the right to transmit (if there is a
      * package to transmit), increases the packages that has been transmitted and completes
      * the transmission of the package
      *
-     * @param ltdmaNode that has the right to transmit
+     * @param atdmaNode that has the right to transmit
      */
-    private void transmit(LtdmaNode ltdmaNode) {
-        ltdmaNode.removePackage();
+    private void transmit(AtdmaNode atdmaNode) {
+        atdmaNode.removePackage();
         packagesTransmited++;
     }
 
