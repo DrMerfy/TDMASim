@@ -12,9 +12,8 @@ public class TdmaSimulator {
     private int maxSizeOfPacketsList;
     private int numberOfCircles;
 
-    // ArrayLists which contain the Stations for every Simulation
-    private ArrayList<TdmaStation> tdmaStations;
-    private ArrayList<AtdmaStation> atdmaStations;
+    // an ArrayList which contains the Stations for every Simulation
+    private ArrayList<Station> stations;
 
     // variable which is calculated from the user given variables
     private final int maxTime;
@@ -37,24 +36,23 @@ public class TdmaSimulator {
 
         this.maxTime = numberOfStations * numberOfCircles;
 
-        this.tdmaStations = new ArrayList<>();
-        this.atdmaStations = new ArrayList<>();
+        this.stations = new ArrayList<>();
     }
 
     /**
      * The function that starts a noiseless, based on a uniform probability, Simulation of the TDMA Mac protocol
      *
-     * @param pArrival is the probability of the arrival of a packet at every TdmaStation
+     * @param pArrival is the probability of the arrival of a packet at every Station
      */
     public void runTdmaSimulation(double pArrival) {
         // start of initializations
         packetsTransmitted = 0;
 
-        tdmaStations.clear();
+        stations.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackets = new ArrayList<>();
 
         for (int i = 0; i < maxSizeOfPacketsList; i++) {
-            tdmaStations.add(new TdmaStation(maxSizeOfPacketsList));
+            stations.add(new Station(maxSizeOfPacketsList));
         }
 
         int time = 0;
@@ -64,19 +62,19 @@ public class TdmaSimulator {
             /* Increase the delay time of each packet of each Station by 1 and
              * Create a packet for each Station with probability equal to pArrival
              */
-            for (TdmaStation tdmaStation : tdmaStations) {
-                tdmaStation.increaseDelayTimeOPackets();
-                tdmaStation.createPacket(pArrival);
+            for (Station station : stations) {
+                station.increaseDelayTimeOPackets();
+                station.createPacket(pArrival);
             }
 
             // Find which station is going to transmit
-            int idOfTransmittingStation = time % tdmaStations.size();
+            int idOfTransmittingStation = time % stations.size();
 
             // If the selected station has something to transmit, it transmits the first packet of the station.
-            if (!tdmaStations.get(idOfTransmittingStation).isEmpty()) {
-                delayTimeOfTransmittedPackets.add(tdmaStations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+            if (!stations.get(idOfTransmittingStation).isEmpty()) {
+                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
 
-                transmit(tdmaStations.get(idOfTransmittingStation));
+                transmit(stations.get(idOfTransmittingStation));
             }
             // Go to the next time slot.
             time++;
@@ -87,22 +85,22 @@ public class TdmaSimulator {
     }
 
     /**
-     * The function that starts a noiseless bursty simulation of the ATDMA Mac protocol
-     * Based on the paper IEEE transactions on communications, vol 51, No 4 April 2003
+     * The function that starts a noiseless bursty simulation of the TDMA Mac protocol
+     * According to the section 3 of the paper IEEE transactions on communications, vol 51, No 4 April 2003
      * Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S.Pomportsis
      *
      * @param R                is the percentage of slots with packet generation
      * @param meanBurstLengths is an array that includes the mean burst length of every AtdmaStation
      */
-    public void runAtdmaSimulator(double R, ArrayList<Integer> meanBurstLengths) {
+    public void runBurstyTdmaSimulator(double R, ArrayList<Integer> meanBurstLengths) {
         // start of initializations
         packetsTransmitted = 0;
 
-        atdmaStations.clear();
+        stations.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackets = new ArrayList<>();
 
         for (int i = 0; i < maxSizeOfPacketsList; i++) {
-            atdmaStations.add(new AtdmaStation(maxSizeOfPacketsList, meanBurstLengths.get(i)));
+            stations.add(new Station(maxSizeOfPacketsList, meanBurstLengths.get(i)));
         }
 
         int time = 0;
@@ -112,19 +110,19 @@ public class TdmaSimulator {
             /* Increase the delay time of each packet of each Station by 1 and
              * for every Atdma Station act according to it's State
              */
-            for (AtdmaStation atdmaStation : atdmaStations) {
-                atdmaStation.increaseDelayTimeOPackets();
-                atdmaStation.actAccordingToState(R, atdmaStations.size());
+            for (Station station : stations) {
+                station.increaseDelayTimeOPackets();
+                station.actAccordingToState(R, stations.size());
             }
 
             // Find which station is going to transmit
-            int idOfTransmittingStation = time % atdmaStations.size();
+            int idOfTransmittingStation = time % stations.size();
 
             // If the selected station has something to transmit, it transmits the first packet of the station.
-            if (!atdmaStations.get(idOfTransmittingStation).isEmpty()) {
-                delayTimeOfTransmittedPackets.add(atdmaStations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+            if (!stations.get(idOfTransmittingStation).isEmpty()) {
+                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
 
-                transmit(atdmaStations.get(idOfTransmittingStation));
+                transmit(stations.get(idOfTransmittingStation));
             }
             // Go to the next time slot.
             time++;
@@ -148,28 +146,17 @@ public class TdmaSimulator {
     }
 
     /**
-     * This function removes the first packet from the TdmaStation that has the right to transmit (if there is a
+     * This function removes the first packet from the Station that has the right to transmit (if there is a
      * packet to transmit), increases the total amount of packets that has been transmitted and completes
      * the transmission of the packet
      *
-     * @param tdmaStation that has the right to transmit
+     * @param station that has the right to transmit
      */
-    private void transmit(TdmaStation tdmaStation) {
-        tdmaStation.removeFirstPacket();
+    private void transmit(Station station) {
+        station.removeFirstPacket();
         packetsTransmitted++;
     }
 
-    /**
-     * This function removes the first packet from the AtdmaStation that has the right to transmit (if there is a
-     * packet to transmit), increases the total amount of packets that has been transmitted and completes
-     * the transmission of the packet
-     *
-     * @param atdmaStation that has the right to transmit
-     */
-    private void transmit(AtdmaStation atdmaStation) {
-        atdmaStation.removeFirstPacket();
-        packetsTransmitted++;
-    }
 
     /**
      * @return the Throughput of the Simulation

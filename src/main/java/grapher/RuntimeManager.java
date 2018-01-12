@@ -59,7 +59,7 @@ class RuntimeManager {
         }else {
             ArrayList<Integer> rValues = mn.getRValues();
             for (double p = 0.05; p <= 1; p += 0.05) {
-                sim.runAtdmaSimulator(p,rValues);
+                sim.runBurstyTdmaSimulator(p,rValues);
                 delay.add(sim.getAverageDelayTimeSlots());
                 throughput.add(sim.getThroughput());
                 th$p.addValue(sim.getThroughput());

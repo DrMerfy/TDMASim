@@ -6,14 +6,14 @@ import java.util.Random;
 /**
  * @author Spiros
  */
-public class AtdmaStation {
-    // a queue of waiting packets of the AtdmaStation
+public class Station {
+    // a queue of waiting packets of the TdmaStation
     private LinkedList<Packet> queueOfPackets;
 
     // the max size that the packets' queue can reach
     private final int packetListMaxSize;
 
-    // the mean burst-length
+    // the mean burst-length which we use only when we want bursty simulation
     private final int meanBurstLength;
 
     // states of the AtdmaStation
@@ -24,26 +24,58 @@ public class AtdmaStation {
     // the state of the AtdmaStation
     private State state;
 
-
     /**
-     * we initialize the AdtmaStation to be idle while we construct it
+     * trivial constructor
      *
-     * @param packetListMaxSize of the LdtmaNode
+     * @param packetListMaxSize of the TdmaStation
      */
-    public AtdmaStation(int packetListMaxSize, int meanBurstLength) {
+    public Station(int packetListMaxSize) {
         this.packetListMaxSize = packetListMaxSize;
-        this.meanBurstLength = meanBurstLength;
-        this.state = State.Idle;
-
+        //trivial initialization
+        this.meanBurstLength = 1;
         this.queueOfPackets = new LinkedList<>();
     }
 
+    /**
+     * trivial constructor
+     *
+     * we initialize the TtmaStation with bursty traffic to be idle while we construct it
+     *
+     * @param packetListMaxSize of the TdmaStation with bursty traffic
+     * @param meanBurstLength of the TdmaStation with bursty traffic
+     */
+    public Station(int packetListMaxSize, int meanBurstLength) {
+        this.packetListMaxSize = packetListMaxSize;
+        this.meanBurstLength = meanBurstLength;
+        this.queueOfPackets = new LinkedList<>();
+
+        this.state = State.Idle;
+    }
 
     /**
      * @return a boolean value if the queue Of Packets is empty
      */
     public boolean isEmpty() {
         return queueOfPackets.isEmpty();
+    }
+
+    /**
+     * creates a packet using the given pArrival
+     *
+     * @param pArrival is the probability of the arrival of a packet at the TdmaStation
+     */
+    public boolean createPacket(double pArrival) {
+        Random rand = new Random();
+        double random = rand.nextDouble();
+
+        if (queueOfPackets.size() < packetListMaxSize) {
+            if (random <= pArrival) {
+                // we add a packet to the list
+                queueOfPackets.add(new Packet());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -93,11 +125,11 @@ public class AtdmaStation {
     }
 
     /**
-     * increases the delay time of every packet of the AtdmaStation by 1
+     * increases the delay time of every packet of the TdmaStation by 1
      */
     public void increaseDelayTimeOPackets() {
-        for (Packet networkpacket : queueOfPackets) {
-            networkpacket.increaseDelay();
+        for (Packet packet : queueOfPackets) {
+            packet.increaseDelay();
         }
     }
 
