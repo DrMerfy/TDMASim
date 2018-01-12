@@ -16,12 +16,12 @@ public class Station {
     // the mean burst-length which we use only when we want bursty simulation
     private final int meanBurstLength;
 
-    // states of the AtdmaStation
+    // states of the Station
     public enum State {
         Idle, Active,
     }
 
-    // the state of the AtdmaStation
+    // the state of the Station
     private State state;
 
     /**
@@ -41,8 +41,8 @@ public class Station {
      *
      * we initialize the TtmaStation with bursty traffic to be idle while we construct it
      *
-     * @param packetListMaxSize of the TdmaStation with bursty traffic
-     * @param meanBurstLength of the TdmaStation with bursty traffic
+     * @param packetListMaxSize of the Station with bursty traffic
+     * @param meanBurstLength of the Station with bursty traffic
      */
     public Station(int packetListMaxSize, int meanBurstLength) {
         this.packetListMaxSize = packetListMaxSize;
@@ -79,11 +79,11 @@ public class Station {
     }
 
     /**
-     * This function tries to change the state of the Atdma Station according to a probability which is selected
+     * This function tries to change the state of the Station according to a probability which is selected
      * according to each state and it is defined by R, N and B
      *
      * @param R is the percentage of slots with packet generation
-     * @param N is the number of AtdmaNodes that participate in the simulation
+     * @param N is the number of Stations that participate in the simulation
      */
     private void tryToChangeState(double R, int N) {
         Random rand = new Random();
@@ -105,12 +105,12 @@ public class Station {
     }
 
     /**
-     * Acts according to the state of the AtdmaStation
+     * Acts according to the state of the State
      * if the node is in Active state, it generates a packet per slot and then tries to change state
      * if the node is in Idle state, it tries to change state
      *
      * @param R is the percentage of slots with packet generation
-     * @param N is the number of AtdmaNodes that participate in the simulation
+     * @param N is the number of States that participate in the simulation
      */
     public void actAccordingToState(double R, int N) {
         if (state == State.Active) {
@@ -125,7 +125,7 @@ public class Station {
     }
 
     /**
-     * increases the delay time of every packet of the TdmaStation by 1
+     * increases the delay time of every packet of the Station by 1
      */
     public void increaseDelayTimeOPackets() {
         for (Packet packet : queueOfPackets) {

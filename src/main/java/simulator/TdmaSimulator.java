@@ -70,7 +70,7 @@ public class TdmaSimulator {
             // Find which station is going to transmit
             int idOfTransmittingStation = time % stations.size();
 
-            // If the selected station has something to transmit, it transmits the first packet of the station.
+            // If the selected station has something to transmit, it transmits the first packet of the Station.
             if (!stations.get(idOfTransmittingStation).isEmpty()) {
                 delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
 
@@ -90,7 +90,7 @@ public class TdmaSimulator {
      * Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S.Pomportsis
      *
      * @param R                is the percentage of slots with packet generation
-     * @param meanBurstLengths is an array that includes the mean burst length of every AtdmaStation
+     * @param meanBurstLengths is an array that includes the mean burst length of every Station
      */
     public void runBurstyTdmaSimulator(double R, ArrayList<Integer> meanBurstLengths) {
         // start of initializations
@@ -108,7 +108,7 @@ public class TdmaSimulator {
 
         while (time < maxTime) {
             /* Increase the delay time of each packet of each Station by 1 and
-             * for every Atdma Station act according to it's State
+             * for every Station act according to it's State
              */
             for (Station station : stations) {
                 station.increaseDelayTimeOPackets();
@@ -187,7 +187,7 @@ public class TdmaSimulator {
     }
 
     /**
-     * @return the number of circles that we set in order the run the simultation
+     * @return the number of circles that we set in order the run the Simulation
      */
     public int getNumberOfCircles() {
         return numberOfCircles;
