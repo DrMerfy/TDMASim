@@ -6,6 +6,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="root" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="grapher.MainPage">
@@ -14,28 +15,7 @@
          <StackPane.margin>
             <Insets top="20.0" />
          </StackPane.margin>
-         <children>
-            <JFXTextField fx:id="num_nodes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_LEFT">
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </JFXTextField>
-            <Label prefHeight="26.0" prefWidth="115.0" text="Number of nodes" StackPane.alignment="BOTTOM_LEFT" />
-            <JFXTextField fx:id="list_size" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_CENTER">
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </JFXTextField>
-            <Label prefHeight="26.0" prefWidth="111.0" text="Package list size" StackPane.alignment="BOTTOM_CENTER" />
-            <JFXTextField fx:id="num_circles" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="TOP_RIGHT" />
-            <Label prefHeight="26.0" prefWidth="71.0" text="Circles" StackPane.alignment="BOTTOM_RIGHT" />
-         </children>
       </StackPane>
-      <Label fx:id="r_values" text="B_Values" StackPane.alignment="TOP_CENTER">
-         <StackPane.margin>
-            <Insets top="120.0" />
-         </StackPane.margin>
-      </Label>
       <ScrollPane fx:id="r_holder" prefHeight="200.0" prefWidth="200.0">
          <StackPane.margin>
             <Insets top="150.0" />
@@ -45,15 +25,45 @@
             <Insets bottom="40.0" right="40.0" />
          </StackPane.margin>
       </JFXButton>
-      <JFXToggleButton fx:id="btn_bursty" text="ATDMA with Bursty traffic" StackPane.alignment="TOP_LEFT">
+      <JFXToggleButton fx:id="btn_bursty" text="bursty traffic" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
             <Insets left="70.0" top="90.0" />
          </StackPane.margin>
       </JFXToggleButton>
-      <Label text="TDMA" StackPane.alignment="TOP_LEFT">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="30.0" StackPane.alignment="TOP_CENTER">
+         <children>
+            <StackPane>
+               <children>
+                  <JFXTextField fx:id="num_nodes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" StackPane.alignment="CENTER" />
+                  <Label prefHeight="26.0" prefWidth="127.0" text="number of stations" StackPane.alignment="BOTTOM_CENTER" />
+               </children>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <JFXTextField fx:id="list_size" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <Label prefHeight="26.0" prefWidth="128.0" text="size of packet's list" StackPane.alignment="BOTTOM_CENTER" />
+               </children>
+            </StackPane>
+            <StackPane>
+               <children>
+                  <JFXTextField fx:id="num_circles" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                  <Label prefHeight="26.0" prefWidth="49.0" text="circles" StackPane.alignment="BOTTOM_CENTER" />
+               </children>
+            </StackPane>
+         </children>
          <StackPane.margin>
-            <Insets left="20.0" top="115.0" />
+            <Insets />
+         </StackPane.margin>
+      </HBox>
+      <Label fx:id="r_values" text="mean burst length values" StackPane.alignment="TOP_CENTER">
+         <StackPane.margin>
+            <Insets top="120.0" />
          </StackPane.margin>
       </Label>
+      <StackPane fx:id="loading_dialog" prefHeight="150.0" prefWidth="200.0" styleClass="loading-dialog">
+         <children>
+            <Label text="Calculating" />
+         </children>
+      </StackPane>
    </children>
 </StackPane>

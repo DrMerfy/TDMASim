@@ -1,6 +1,11 @@
 /*Main page css*/
 * {
     -fx-primary: #2196F3;
+    -fx-white: #FAFAFA;
+}
+
+.root {
+    -fx-background-color: -fx-white;
 }
 
 .pane-node {
@@ -9,13 +14,85 @@
 
 /*Main Page CSS*/
 .jfx-text-field {
-    -fx-focus-color: -fx-primary;
+    -jfx-focus-color: -fx-primary;
 }
 
 .jfx-text-field:error {
-    -fx-focus-color: #AA0000;
+    -jfx-focus-color: #AA0000;
 }
 
 .btn-start {
     -fx-background-color: -fx-primary;
+}
+
+.loading-dialog {
+    -fx-background-color: #a5a5a5;
+}
+
+.jfx-toggle-button {
+    -jfx-toggle-color: -fx-primary;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: -fx-white;
+}
+
+/* Scroll bar */
+.scroll-pane{
+    -fx-border-color:derive(gray,60%);
+}
+
+/* The main scrollbar CSS class of ListView */
+.scroll-pane .scroll-bar:horizontal ,
+.scroll-pane  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+
+}
+
+/* The increment and decrement button */
+.scroll-pane .increment-button ,.scroll-pane .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+
+
+/* The increment and decrement arrows */
+.scroll-pane .scroll-bar .increment-arrow ,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+
+/* The main scrollbar track */
+.scroll-pane .scroll-bar:horizontal .track ,
+.scroll-pane .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+/* The main scrollbar thumb which we drag every time (movable) */
+.scroll-pane .scroll-bar:horizontal .thumb,
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(grey,40%);
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0em;
+
+}
+
+/* The main scrollbar track on event of "hover" and "pressed" */
+
+.scroll-pane .scroll-bar:horizontal:hover .track ,
+.scroll-pane .scroll-bar:horizontal:pressed .track ,
+.scroll-pane .scroll-bar:vertical:hover .track,
+.scroll-pane .scroll-bar:vertical:pressed .track{
+    -fx-background-color: derive(#434343,20%);
+    -fx-opacity: 0.2;
+    -fx-background-radius: 0em;
+
 }

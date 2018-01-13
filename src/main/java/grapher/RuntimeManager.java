@@ -1,10 +1,9 @@
 package grapher;
 
 import graphs.LineGraph;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -29,11 +28,27 @@ class RuntimeManager {
             App.showStage(
                     new Scene(loader.load()), "TDMA Simulator");
             mn = loader.getController();
-            mn.setOnStartPressed(event -> startSimulator());
+            mn.setOnStartPressed(event ->{
+                mn.startLoading();
+                //Graph initialization
+                th$p = new LineGraph(width, height);
+                del$th = new LineGraph(width, height);
 
-            //Graph initialization
-            th$p = new LineGraph(width, height);
-            del$th = new LineGraph(width, height);
+                Task task = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        startSimulator();
+                        return this;
+                    }
+                };
+                task.setOnSucceeded(event1 ->{
+                    mn.stopLoading();
+                    Plotter.plot(th$p, del$th);
+                });
+                new Thread(task).start();
+            });
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,6 +71,9 @@ class RuntimeManager {
                 throughput.add(sim.getThroughput());
                 th$p.addValue(sim.getThroughput());
             }
+            Plotter.setTitle("TDMA Simulation", th$p);
+            Plotter.setTitle("TDMA Simulation", del$th);
+            Plotter.setAxisLabel("probability of packet arrival","throughput(%)",th$p);
         }else {
             ArrayList<Integer> rValues = mn.getRValues();
             for (double p = 0.05; p <= 1; p += 0.05) {
@@ -65,6 +83,9 @@ class RuntimeManager {
                 th$p.addValue(sim.getThroughput());
             }
             del$th.setSmoothing(0);
+            Plotter.setTitle("TDMA Bursty traffic Simulation", th$p);
+            Plotter.setTitle("TDMA Bursty traffic Simulation", del$th);
+            Plotter.setAxisLabel("percentage of slots with packet generation","throughput(%)",th$p);
         }
 
         for(int i = 0; i<throughput.size(); i++){
@@ -88,20 +109,11 @@ class RuntimeManager {
         del$th.render(LineGraph.Render.LINES);
 
         //Scene management
-        AnchorPane pane1 = new AnchorPane(th$p);
-        AnchorPane.setLeftAnchor(th$p,30.0);
-        AnchorPane.setBottomAnchor(th$p, 30.0);
-
-        NumberAxis xAxis = new NumberAxis(0, th$p.getMaxValue(), 1);
-        pane1.getChildren().add(xAxis);
-        AnchorPane.setBottomAnchor(xAxis,0.0);
-        AnchorPane.setLeftAnchor(xAxis, 30.0);
-
-        Plotter.setAxisLabel("p_arrival","throughput",th$p);
-        Plotter.setAxisLabel("throughput", "delay", del$th);
         Plotter.mapXAxis(0,1,th$p);
-        Plotter.mapXAxis(0,1,del$th);
-        Plotter.plot(th$p, del$th);
+        Plotter.mapYAxis(0,100,th$p);
+        Plotter.setAxisLabel("throughput(%)", "delay(slots)", del$th);
+        Plotter.mapXAxis(0,100,del$th);
+
     }
 
 }
