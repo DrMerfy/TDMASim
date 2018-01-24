@@ -138,7 +138,7 @@ public class MainPage {
     }
 
     public void stopLoading() {
-        loading_dialog.setVisible(false);
+        loading_dialog.setOpacity(0);
     }
 
     //Non-Number insertion catchers
