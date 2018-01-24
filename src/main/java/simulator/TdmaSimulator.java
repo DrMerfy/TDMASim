@@ -86,8 +86,8 @@ public class TdmaSimulator {
 
     /**
      * The function that starts a noiseless bursty simulation of the TDMA Mac protocol
-     * According to the section 3 of the paper IEEE transactions on communications, vol 51, No 4 April 2003
-     * Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S.Pomportsis
+     * According to the section 3 of the paper IEEE transactions on communications, Vol 51, No 4 April 2003
+     * Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S. Pomportsis
      *
      * @param R                is the percentage of slots with packet generation
      * @param meanBurstLengths is an array that includes the mean burst length of every Station
