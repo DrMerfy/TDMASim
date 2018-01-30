@@ -14,17 +14,17 @@ public class App extends Application {
     static PseudoClass error = PseudoClass.getPseudoClass("error");
     static URL theme;
 
-    public static void Launch(String args[]){
+    public static void Launch(String args[]) {
         Application.launch(args);
     }
 
-    public static void showStage(Scene scene, String title){
+    public static void showStage(Scene scene, String title) {
         currentStage.setTitle(title);
         currentStage.setScene(scene);
         currentStage.show();
     }
 
-    public static void newStage(Scene scene, String title){
+    public static void newStage(Scene scene, String title) {
         Stage stage = new Stage();
         stage.setTitle(title);
         stage.setScene(scene);
