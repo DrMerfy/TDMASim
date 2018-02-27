@@ -2,6 +2,8 @@ package simulator;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 
 import static simulator.Station.LastKnownMaxDelayTimeOfPacketInQueue;
@@ -155,7 +157,7 @@ public class TdmaSimulator {
     /**
      * The function that starts a noiseless, with bursty traffic, simulation of the Extended-header-TDMA mac protocol
      * which is like the standard TDMA just with the addition of the size of the queue of a station, into the header
-     * of a packet which helps in ordering the stations according their queue size.
+     * of a packet which helps in ordering the stations according their queue size or max packet delay time.
      * <p>
      * The bursty traffic is based on the section 3 of the paper IEEE transactions on communications, Vol 51,
      * No 4 April 2003 Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S. Pomportsis
@@ -184,9 +186,73 @@ public class TdmaSimulator {
              * in descending order according to their lastKnownQueueOfPacketsSize
              */
             if (time % stations.size() == 0) {
-                stations.sort(comparator);
-                //stations.sort(LastKnownQueueOfPacketsSize);
-                //stations.sort(LastKnownMaxDelayTimeOfPacketInQueue);
+                stations.sort(Collections.reverseOrder(comparator));
+            }
+
+            //  For every station
+            for (Station station : stations) {
+                //Increase the delay time of each packet of each Station by 1
+                station.increaseDelayTimeOPackets();
+
+                /* for every Station act according to it's State, get the packet generations state
+                 * and try to increase the amount of the lost packets
+                 */
+                tryToIncreaseLostPackets(station.actAccordingToState(R, stations.size()));
+            }
+
+            // Find which station is going to transmit
+            int idOfTransmittingStation = time % stations.size();
+
+            // If the selected station has something to transmit, it transmits the first packet of the Station.
+            if (stations.get(idOfTransmittingStation).getQueueOfPacketsSize() > 0) {
+                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+
+                transmit(stations.get(idOfTransmittingStation));
+            }
+            // we set the lastKnownQueueOfPacketsSize of the station
+            stations.get(idOfTransmittingStation).setLastKnownQueueOfPacketsSize();
+            stations.get(idOfTransmittingStation).setLastKnownMaxDelayTimeOfPacketInQueue();
+            // Go to the next time slot.
+            time++;
+        }
+
+        // calculation of the average delay time-slots
+        averageDelayTimeSlots = calculationOfAverageDelayTimeSlots(delayTimeOfTransmittedPackets);
+    }
+
+    /**
+     * The function that starts a noiseless, with bursty traffic, simulation of the Extended-header-TDMA mac protocol
+     * which is like the standard TDMA just with ordering according to their queue size or max packet delay time every n
+     * circles and wasting one slot to do so.
+     * <p>
+     * The bursty traffic is based on the section 3 of the paper IEEE transactions on communications, Vol 51,
+     * No 4 April 2003 Georgios I. Papadimitriou, Senior Member. IEEE, and Andreas S. Pomportsis
+     *
+     * @param R                is the percentage of slots with packet generation
+     * @param meanBurstLengths is an array that includes the mean burst length of every Station
+     */
+    public void runBurstyNSOTdmaSimulation(double R, ArrayList<Integer> meanBurstLengths, Comparator<Station> comparator, int numberOfCirclesForOrdering) {
+        // start of initializations
+        packetsTransmitted = 0;
+        generatedPackets = 0;
+        packetsLost = 0;
+        stations.clear();
+        ArrayList<Integer> delayTimeOfTransmittedPackets = new ArrayList<>();
+
+        for (int i = 0; i < numberOfStations; i++) {
+            stations.add(new Station(i, maxSizeOfPacketsList, meanBurstLengths.get(i)));
+        }
+
+        int time = 0;
+        totalTimeSlots = numberOfStations * numberOfCircles;
+        // end of initializations
+
+        while (time < totalTimeSlots) {
+            /* every frame (every # slots which is equal to the amount of stations) sort the stations in
+             * in descending order according to their lastKnownQueueOfPacketsSize
+             */
+            if (time % stations.size() == 0) {
+                stations.sort(Collections.reverseOrder(comparator));
             }
 
             //  For every station

@@ -176,7 +176,7 @@ public class Station {
     /**
      * @return the last known queue of packets size
      */
-    public int getLastKnownQueueOfPacketsSize() {
+    private int getLastKnownQueueOfPacketsSize() {
         return lastKnownQueueOfPacketsSize;
     }
 
@@ -184,19 +184,17 @@ public class Station {
      * we set the last known average delay time of packets in of queue when it tries to transmit
      */
     public void setLastKnownMaxDelayTimeOfPacketInQueue() {
-        int maxDelayTime = 0;
-        for (Packet packet : queueOfPackets) {
-            if (maxDelayTime < packet.getDelayTime()) {
-                maxDelayTime = packet.getDelayTime();
-            }
+        if (!queueOfPackets.isEmpty()) {
+            lastKnownMaxDelayTimeOfPacketInQueue = queueOfPackets.getFirst().getDelayTime();
+        } else {
+            lastKnownMaxDelayTimeOfPacketInQueue = 0;
         }
-        lastKnownMaxDelayTimeOfPacketInQueue = maxDelayTime;
     }
 
     /**
      * @return the last known average delay time of packets in of queue
      */
-    public int getLastKnownMaxDelayTimeOfPacketInQueue() {
+    private int getLastKnownMaxDelayTimeOfPacketInQueue() {
         return lastKnownMaxDelayTimeOfPacketInQueue;
     }
 
@@ -229,7 +227,7 @@ public class Station {
     public static Comparator<Station> LastKnownQueueOfPacketsSize = new Comparator<Station>() {
         @Override
         public int compare(Station s1, Station s2) {
-            return s2.getLastKnownQueueOfPacketsSize() - s1.getLastKnownQueueOfPacketsSize();
+            return s1.getLastKnownQueueOfPacketsSize() - s2.getLastKnownQueueOfPacketsSize();
         }
     };
 
@@ -239,7 +237,7 @@ public class Station {
     public static Comparator<Station> LastKnownMaxDelayTimeOfPacketInQueue = new Comparator<Station>() {
         @Override
         public int compare(Station s1, Station s2) {
-            return s2.getLastKnownMaxDelayTimeOfPacketInQueue() - s1.getLastKnownMaxDelayTimeOfPacketInQueue();
+            return s1.getLastKnownMaxDelayTimeOfPacketInQueue() - s2.getLastKnownMaxDelayTimeOfPacketInQueue();
         }
     };
 

@@ -21,6 +21,7 @@ public class Main {
         TdmaSimulator sim = new TdmaSimulator(10, 5, 1000000);
 
         //*
+        System.out.println("simple bursty simulation");
         sim.runBurstyTdmaSimulation(0.2, bursty);
         System.out.println("total time slots = " + sim.getTotalTimeSlots());
         System.out.println("Average delay = " + sim.getAverageDelayTimeSlots());
@@ -29,6 +30,7 @@ public class Main {
         //*/
 
         //*
+        System.out.println("bursty simulation with extra header according to LastKnownMaxDelayTimeOfPacketInQueue");
         sim.runBurstyEHTdmaSimulation(0.2, bursty, LastKnownMaxDelayTimeOfPacketInQueue);
         System.out.println("\ntotal time slots = " + sim.getTotalTimeSlots());
         System.out.println("Average delay = " + sim.getAverageDelayTimeSlots());
@@ -37,6 +39,7 @@ public class Main {
         //*/
 
         //*
+        System.out.println("bursty simulation with extra header according to LastKnownQueueOfPacketsSize");
         sim.runBurstyEHTdmaSimulation(0.2, bursty, LastKnownQueueOfPacketsSize);
         System.out.println("\ntotal time slots = " + sim.getTotalTimeSlots());
         System.out.println("Average delay = " + sim.getAverageDelayTimeSlots());
