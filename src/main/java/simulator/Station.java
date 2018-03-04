@@ -167,6 +167,13 @@ public class Station {
     }
 
     /**
+     * @return the queue of packets
+     */
+    public LinkedList<Packet> getQueueOfPackets() {
+        return queueOfPackets;
+    }
+
+    /**
      * we set the last known queue of packets when it tries to transmit
      */
     public void setLastKnownQueueOfPacketsSize() {
@@ -222,7 +229,7 @@ public class Station {
     }
 
     /**
-     * a comparator which helps us to sort the stations according to their LastKnownQueueOfPacketsSize in descending order
+     * a comparator which helps us to sort the stations according to their LastKnownQueueOfPacketsSize
      */
     public static Comparator<Station> LastKnownQueueOfPacketsSize = new Comparator<Station>() {
         @Override
@@ -232,7 +239,7 @@ public class Station {
     };
 
     /**
-     * a comparator which helps us to sort the stations according to their maxDelayTimeOfPacketInQueue in descending order
+     * a comparator which helps us to sort the stations according to their LastKnownMaxDelayTimeOfPacketInQueue
      */
     public static Comparator<Station> LastKnownMaxDelayTimeOfPacketInQueue = new Comparator<Station>() {
         @Override
@@ -241,5 +248,23 @@ public class Station {
         }
     };
 
+    /**
+     * a comparator which helps us to sort the stations according to their queueOfPacketsSize
+     */
+    public static Comparator<Station> QueueOfPacketsSize = new Comparator<Station>() {
+        @Override
+        public int compare(Station s1, Station s2) {
+            return s1.getQueueOfPacketsSize() - s2.getQueueOfPacketsSize();
+        }
+    };
 
+    /**
+     * a comparator which helps us to sort the stations according to their maxDelayTimeOfPacketInQueue
+     */
+    public static Comparator<Station> MaxDelayTimeOfPacketInQueue = new Comparator<Station>() {
+        @Override
+        public int compare(Station s1, Station s2) {
+            return s1.getQueueOfPackets().getFirst().getDelayTime() - s2.getQueueOfPackets().getFirst().getDelayTime();
+        }
+    };
 }
