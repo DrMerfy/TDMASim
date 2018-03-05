@@ -18,22 +18,22 @@ public class TdmaSimulator {
     private int maxSizeOfPacketsList;
     private int numberOfCircles;
 
-    // an ArrayList which contains the Stations for every Simulation
+    //  an ArrayList which contains the Stations for every Simulation
     private ArrayList<Station> stations;
 
-    // variable which is calculated from the user given variables
+    //  variable which is calculated from the user given variables
     private int totalTimeSlots;
 
-    // a counter of the transmitted packages
+    //  a counter of the transmitted packages
     private int packetsTransmitted;
 
-    // a counter of the generated packets
+    //  a counter of the generated packets
     private int generatedPackets;
 
-    // a counter of the lost packets because the ready queue of a station was full
+    //  a counter of the lost packets because the ready queue of a station was full
     private int packetsLost;
 
-    // the average delay Time slots of a simulation
+    //  the average delay Time slots of a simulation
     private double averageDelayTimeSlots;
 
     /**
@@ -71,12 +71,12 @@ public class TdmaSimulator {
 
         int time = 0;
         totalTimeSlots = numberOfStations * numberOfCircles;
-        // end of initializations
+        //  end of initializations
 
         while (time < totalTimeSlots) {
             //  For every station
             for (Station station : stations) {
-                //Increase the delay time of each packet of each Station by 1
+                //  Increase the delay time of each packet of each Station by 1
                 station.increaseDelayTimeOPackets();
 
                 /* create a packet for each Station with probability equal to pArrival, get the packet generations state
@@ -85,20 +85,20 @@ public class TdmaSimulator {
                 tryToIncreaseLostPackets(station.createPacket(pArrival));
             }
 
-            // Find which station is going to transmit
-            int idOfTransmittingStation = time % stations.size();
+            //  Find which station is going to transmit
+            Station transmittingStation = stations.get(time % stations.size());
 
-            // If the selected station has something to transmit, it transmits the first packet of the Station.
-            if (stations.get(idOfTransmittingStation).getQueueOfPacketsSize() > 0) {
-                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+            //  If the selected station has something to transmit, it transmits the first packet of the Station.
+            if (transmittingStation.getQueueOfPacketsSize() > 0) {
+                delayTimeOfTransmittedPackets.add(transmittingStation.getDelayTimeOfFirstPacket());
 
-                transmit(stations.get(idOfTransmittingStation));
+                transmit(transmittingStation);
             }
-            // Go to the next time slot.
+            //  Go to the next time slot.
             time++;
         }
 
-        // calculation of the average delay time-slots
+        //  calculation of the average delay time-slots
         averageDelayTimeSlots = calculationOfAverageDelayTimeSlots(delayTimeOfTransmittedPackets);
     }
 
@@ -111,7 +111,7 @@ public class TdmaSimulator {
      * @param meanBurstLengths is an array that includes the mean burst length of every Station
      */
     public void runBurstyTdmaSimulation(double R, ArrayList<Integer> meanBurstLengths) {
-        // start of initializations
+        //  start of initializations
         packetsTransmitted = 0;
         generatedPackets = 0;
         packetsLost = 0;
@@ -125,12 +125,12 @@ public class TdmaSimulator {
 
         int time = 0;
         totalTimeSlots = numberOfStations * numberOfCircles;
-        // end of initializations
+        //  end of initializations
 
         while (time < totalTimeSlots) {
             //  For every station
             for (Station station : stations) {
-                //Increase the delay time of each packet of each Station by 1
+                //  Increase the delay time of each packet of each Station by 1
                 station.increaseDelayTimeOPackets();
 
                 /* for every Station act according to it's State, get the packet generations state
@@ -139,20 +139,20 @@ public class TdmaSimulator {
                 tryToIncreaseLostPackets(station.actAccordingToState(R, stations.size()));
             }
 
-            // Find which station is going to transmit
-            int idOfTransmittingStation = time % stations.size();
+            //  Find which station is going to transmit
+            Station transmittingStation = stations.get(time % stations.size());
 
-            // If the selected station has something to transmit, it transmits the first packet of the Station.
-            if (stations.get(idOfTransmittingStation).getQueueOfPacketsSize() > 0) {
-                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+            //  If the selected station has something to transmit, it transmits the first packet of the Station.
+            if (transmittingStation.getQueueOfPacketsSize() > 0) {
+                delayTimeOfTransmittedPackets.add(transmittingStation.getDelayTimeOfFirstPacket());
 
-                transmit(stations.get(idOfTransmittingStation));
+                transmit(transmittingStation);
             }
-            // Go to the next time slot.
+            //  Go to the next time slot.
             time++;
         }
 
-        // calculation of the average delay time-slots
+        //  calculation of the average delay time-slots
         averageDelayTimeSlots = calculationOfAverageDelayTimeSlots(delayTimeOfTransmittedPackets);
     }
 
@@ -170,21 +170,21 @@ public class TdmaSimulator {
      * @param comparator       is the comparator which is is used to order
      */
     public void runBurstyEHTdmaSimulation(double R, ArrayList<Integer> meanBurstLengths, Comparator<Station> comparator) {
-        // start of initializations
+        //  start of initializations
         packetsTransmitted = 0;
         generatedPackets = 0;
         packetsLost = 0;
         stations.clear();
         ArrayList<Integer> delayTimeOfTransmittedPackets = new ArrayList<>();
 
-        // the stations
+        //  the stations
         for (int i = 0; i < numberOfStations; i++) {
             stations.add(new Station(i, maxSizeOfPacketsList, meanBurstLengths.get(i)));
         }
 
         int time = 0;
         totalTimeSlots = numberOfStations * numberOfCircles;
-        // end of initializations
+        //  end of initializations
 
         while (time < totalTimeSlots) {
             /* every frame (every # slots which is equal to the amount of stations) sort the stations in
@@ -196,7 +196,7 @@ public class TdmaSimulator {
 
             //  For every station
             for (Station station : stations) {
-                //Increase the delay time of each packet of each Station by 1
+                //  Increase the delay time of each packet of each Station by 1
                 station.increaseDelayTimeOPackets();
 
                 /* for every Station act according to it's State, get the packet generations state
@@ -206,22 +206,22 @@ public class TdmaSimulator {
             }
 
             // Find which station is going to transmit
-            int idOfTransmittingStation = time % stations.size();
+            Station transmittingStation = stations.get(time % stations.size());
 
-            // If the selected station has something to transmit, it transmits the first packet of the Station.
-            if (stations.get(idOfTransmittingStation).getQueueOfPacketsSize() > 0) {
-                delayTimeOfTransmittedPackets.add(stations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+            //  If the selected station has something to transmit, it transmits the first packet of the Station.
+            if (transmittingStation.getQueueOfPacketsSize() > 0) {
+                delayTimeOfTransmittedPackets.add(transmittingStation.getDelayTimeOfFirstPacket());
 
-                transmit(stations.get(idOfTransmittingStation));
+                transmit(transmittingStation);
             }
-            // we set the lastKnownQueueOfPacketsSize of the station
-            stations.get(idOfTransmittingStation).setLastKnownQueueOfPacketsSize();
-            stations.get(idOfTransmittingStation).setLastKnownMaxDelayTimeOfPacketInQueue();
-            // Go to the next time slot.
+            //  we set the lastKnownQueueOfPacketsSize of the station
+            transmittingStation.setLastKnownQueueOfPacketsSize();
+            transmittingStation.setLastKnownMaxDelayTimeOfPacketInQueue();
+            //  Go to the next time slot.
             time++;
         }
 
-        // calculation of the average delay time-slots
+        //  calculation of the average delay time-slots
         averageDelayTimeSlots = calculationOfAverageDelayTimeSlots(delayTimeOfTransmittedPackets);
     }
 
@@ -229,7 +229,7 @@ public class TdmaSimulator {
      * The function that starts a noiseless, with bursty traffic, simulation of the Active-Stations-Ordering-Every-N-Circles
      * TDMA mac protocol, which differs from the standard TDMA. The simulator, every n circles wastes a time-slot to ask
      * the stations their queue size. If they have something to transmit, they are gonna be included into the active
-     * stations set, and those will be ordered according to the size of their queue or the packet with the maximum delay-time.
+     * stations set, and those will be ordered according to the size of their queue or their packet with the maximum delay-time.
      * if they don't they will be asked again after n active-stations circles.
      * <p>
      * The bursty traffic is based on the section 3 of the paper IEEE transactions on communications, Vol 51,
@@ -241,7 +241,7 @@ public class TdmaSimulator {
      * @param comparator                 is the comparator which is is used to order
      */
     public void runBurstyASOENCTdmaSimulation(double R, ArrayList<Integer> meanBurstLengths, int numberOfCirclesForOrdering, Comparator<Station> comparator) {
-        // start of initializations
+        //  start of initializations
         packetsTransmitted = 0;
         generatedPackets = 0;
         packetsLost = 0;
@@ -259,7 +259,7 @@ public class TdmaSimulator {
         int circles = 0;
         int time = 0;
         totalTimeSlots = numberOfStations * numberOfCircles;
-        // end of initializations
+        //  end of initializations
 
         while (time < totalTimeSlots) {
             for (int timeSlots = 0; timeSlots < 1 + numberOfCirclesForOrdering * activeStations.size() &&
@@ -267,7 +267,7 @@ public class TdmaSimulator {
 
                 //  For every station
                 for (Station station : stations) {
-                    //Increase the delay time of each packet of each Station by 1
+                    //  Increase the delay time of each packet of each Station by 1
                     station.increaseDelayTimeOPackets();
 
                     /* for every Station act according to it's State, get the packet generations state
@@ -287,30 +287,28 @@ public class TdmaSimulator {
                     activeStations.sort(Collections.reverseOrder(comparator));
                 }
 
-                // Go to the next circle.
+                //  Go to the next circle.
                 if (timeSlots > 0) {
                     if ((timeSlots - 1) % activeStations.size() == activeStations.size() - 1) {
                         circles++;
                     }
 
-                    // Find which station is going to transmit
-                    int idOfTransmittingStation = (timeSlots - 1) % activeStations.size();
+                    //  Find which station is going to transmit
+                    Station transmittingStation = activeStations.get((timeSlots - 1) % activeStations.size());
 
-                    // If the selected station has something to transmit, it transmits the first packet of the Station.
-                    if (activeStations.get(idOfTransmittingStation).getQueueOfPacketsSize() > 0) {
-                        delayTimeOfTransmittedPackets.add(activeStations.get(idOfTransmittingStation).getDelayTimeOfFirstPacket());
+                    //  If the selected station has something to transmit, it transmits the first packet of the Station.
+                    if (transmittingStation.getQueueOfPacketsSize() > 0) {
+                        delayTimeOfTransmittedPackets.add(transmittingStation.getDelayTimeOfFirstPacket());
 
-                        transmit(activeStations.get(idOfTransmittingStation));
+                        transmit(transmittingStation);
                     }
                 }
             }
         }
 
-        // calculation of the average delay time-slots
+        //  calculation of the average delay time-slots
         averageDelayTimeSlots = calculationOfAverageDelayTimeSlots(delayTimeOfTransmittedPackets);
-
     }
-
 
     /**
      * @param delayTimeOfTransmittedPackets an ArrayList that contains the amount of time slots that every transmitted
@@ -318,7 +316,7 @@ public class TdmaSimulator {
      * @return the average delay time of every transmitted packet
      */
     private double calculationOfAverageDelayTimeSlots(ArrayList<Integer> delayTimeOfTransmittedPackets) {
-        int sumDelays = 0;
+        long sumDelays = 0;
         for (Integer delay : delayTimeOfTransmittedPackets) {
             sumDelays += delay;
         }
@@ -335,11 +333,11 @@ public class TdmaSimulator {
      * @param packetGenerationState is the packet generation state
      */
     private void tryToIncreaseLostPackets(int packetGenerationState) {
-        // if there was a packet loss, increase the amount of lost packets and the amount of the generated ones
+        //  if there was a packet loss, increase the amount of lost packets and the amount of the generated ones
         if (packetGenerationState == 0) {
             packetsLost++;
             generatedPackets++;
-        } else if (packetGenerationState == 1) { // else just increase the amount of the generated packets
+        } else if (packetGenerationState == 1) {//  else just increase the amount of the generated packets
             generatedPackets++;
         }
 
